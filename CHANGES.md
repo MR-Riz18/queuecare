@@ -111,3 +111,16 @@ Seed logins: `admin@queuecare.local / Admin123!`,
 - No `node_modules`, `dist/`, or `.env` files are included in this package.
   Run `npm install` in `client/` and `server/` as above.
 - `server/.env.example` is included; create your own `server/.env` from it.
+
+---
+
+## Hosting readiness — 2026-11-12
+
+- `client/src/api/axios.js` — the API address now comes from
+  `VITE_API_URL` when set, falling back to `/api` in dev.
+- `client/src/context/SocketContext.jsx` — the Socket.IO connection now
+  uses `VITE_API_URL` when set, same-origin in dev.
+- `server/utils/cookies.js` — the auth cookie is now `SameSite=None`
+  (with `Secure`) in production, so it is sent cross-site (frontend on
+  Vercel, API on Render). Local dev stays `SameSite=Lax`.
+- `client/.env.example` — created, documenting `VITE_API_URL`.

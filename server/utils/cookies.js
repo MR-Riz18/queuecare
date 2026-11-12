@@ -1,7 +1,8 @@
 /**
  * httpOnly cookie helpers for the JWT access token (cookie name: `token`).
- * SameSite=lax so top-level navigation keeps the session; secure only in
- * production so local http:// development works.
+ * Production is cross-site (frontend on Vercel, API on Render), so the
+ * cookie needs SameSite=None (with Secure) to be sent at all. Local dev
+ * stays Lax so plain http://localhost still works.
  */
 
 const COOKIE_NAME = 'token';
@@ -10,7 +11,7 @@ const MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8h — matches JWT_EXPIRE=8h
 function cookieOptions() {
   return {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: MAX_AGE_MS,
     path: '/',

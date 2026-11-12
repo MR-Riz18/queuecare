@@ -36,7 +36,9 @@ export function SocketProvider({ children }) {
   const [connected, setConnected] = useState(false);
 
   if (!socketRef.current) {
-    socketRef.current = io({
+    // In production the Socket.IO server is the hosted backend
+    // (VITE_API_URL); unset in dev, io() connects to the same origin.
+    socketRef.current = io(import.meta.env.VITE_API_URL || undefined, {
       path: '/socket.io',
       withCredentials: true,
       autoConnect: false,
